@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
-    <types>
-        <members>*</members>
+    <!--<types>
+        <members>IMDB_SearchCtrl</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -26,11 +26,43 @@
     </types>
     <types>
         <members>*</members>
+        <name>StaticResource</name>
+    </types>-->
+    <types>
+        <members>IMDB_FavoritesCtrl</members>
+        <members>IMDB_MovieItemCtrl</members>
+        <members>IMDB_SearchCtrl</members>
+        <name>ApexClass</name>
+    </types>
+    <types>
+        <members>imdbSearch</members>
+        <members>imdbFavorites</members>
+        <members>imdbMovieItem</members>
         <name>LightningComponentBundle</name>
     </types>
     <types>
-        <members>*</members>
-        <name>StaticResource</name>
+        <members>IMDB_Search</members>
+        <members>IMDB_Favorites</members>
+        <name>FlexiPage</name>
+    </types>
+    <types>
+        <members>IMDB_Movie__c</members>
+        <name>CustomObject</name>
+    </types>
+    <types>
+        <members>IMDB_Movie__c.IMDB_Id__c</members>
+        <members>IMDB_Movie__c.IMDB_Title__c</members>
+        <members>IMDB_Movie__c.IMDB_Description__c</members>
+        <members>IMDB_Movie__c.IMDB_Image_URL__c</members>
+        <members>IMDB_Movie__c.IMDB_Runtime__c</members>
+        <members>IMDB_Movie__c.IMDB_Genres__c</members>
+        <members>IMDB_Movie__c.IMDB_Content_Rating__c</members>
+        <members>IMDB_Movie__c.IMDB_Rating__c</members>
+        <members>IMDB_Movie__c.IMDB_Rating_Votes__c</members>
+        <members>IMDB_Movie__c.IMDB_Metacritic_Rating__c</members>
+        <members>IMDB_Movie__c.IMDB_Plot__c</members>
+        <members>IMDB_Movie__c.IMDB_Stars__c</members>
+        <name>CustomField</name>
     </types>
     <version>55.0</version>
 </Package>

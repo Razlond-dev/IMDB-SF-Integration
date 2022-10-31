@@ -1,0 +1,22 @@
+<template>
+    <!-- <div style="margin: 100px;">{responseFromAPI}</div> -->
+    <header>
+        <form id="form">
+            <input
+                type="text"
+                id="search"
+                placeholder="Search"
+                class="search"
+            />
+        </form>
+    </header>
+    <main id="main">
+      <template for:each={arrayOfMovies} for:item="movie" for:index="index">
+          <c-imdb-movie-item
+              key={movie.id}
+              movie={movie}
+              is-initially-added={movie.isAdded}
+          ></c-imdb-movie-item>
+      </template>
+  </main>
+</template>

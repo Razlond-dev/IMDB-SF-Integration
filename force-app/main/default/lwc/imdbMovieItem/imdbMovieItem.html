@@ -1,0 +1,14 @@
+<template>
+    <div class="movie">
+        <img src={image} alt="Image" />
+        <div class={tabClass} onclick={addMovie}>Add {isAdded}</div>
+        <div class="movie-info">
+            <h3 class="movie-title">{title}</h3>
+            <span class="vote_average">{imDbRating}</span>
+        </div>
+        <div class="overview">
+            <h4>Overview:</h4>
+            {plot}
+        </div>
+    </div>
+</template>

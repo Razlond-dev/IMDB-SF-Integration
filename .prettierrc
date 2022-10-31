@@ -1,5 +1,14 @@
 {
   "trailingComma": "none",
+  "singleQuote": true,
+  "printWidth": 80,
+  "proseWrap": "always",
+  "tabWidth": 4,
+  "requireConfig": false,
+  "useTabs": false,
+  "bracketSpacing": true,
+  "jsxBracketSameLine": false,
+  "semi": true,
   "overrides": [
     {
       "files": "**/lwc/**/*.html",
