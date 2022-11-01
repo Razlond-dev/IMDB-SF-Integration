@@ -1,14 +1,8 @@
 <template>
-    <!-- <div style="margin: 100px;">{responseFromAPI}</div> -->
     <header>
-        <form id="form">
-            <input
-                type="text"
-                id="search"
-                placeholder="Search"
-                class="search"
-            />
-        </form>
+        <div class="search-container">
+            <c-imdb-advanced-search onsearch={searchHandler}></c-imdb-advanced-search>
+        </div>
     </header>
     <main id="main">
       <template for:each={arrayOfMovies} for:item="movie" for:index="index">

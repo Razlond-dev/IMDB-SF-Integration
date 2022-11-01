@@ -23,17 +23,10 @@ export default class ImdbMovieItem extends LightningElement {
         this.imDbRating = this.movie.imDbRating;
         this.plot = this.movie.plot;
         this.isAdded = this.movie.isAdded;
-        console.log('item');
-        console.log(JSON.stringify(this.movie.isAdded));
-        console.log(JSON.stringify(this.isAdded));
-        console.log(JSON.stringify(this.isInitiallyAdded));
     }
 
 
     async addMovie() {
-        console.log('start');
-        console.log(this.movie.isAdded);
-        console.log(JSON.stringify(this.movie.isAdded));
         try {
             if (this.isAdded) {
                 await removeMovieFromFavorites({ externalId: this.movie.id });
@@ -68,7 +61,6 @@ export default class ImdbMovieItem extends LightningElement {
                 })
             );
         }
-        console.log('end');
     }
 
     get tabClass() {

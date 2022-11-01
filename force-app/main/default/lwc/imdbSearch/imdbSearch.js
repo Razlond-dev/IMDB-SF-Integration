@@ -1,7 +1,10 @@
 import { LightningElement } from 'lwc';
 import fetchFilms from '@salesforce/apex/IMDB_SearchCtrl.fetchFilms';
 import queryAddedMovieIds from '@salesforce/apex/IMDB_SearchCtrl.queryAddedMovieIds';
-
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+// labels
+import Error_text from '@salesforce/label/c.Error_text';
+import Records_updated_error from '@salesforce/label/c.Records_updated_error';
 export default class ImdbSearch extends LightningElement {
     responseFromAPI;
     testResponse =
@@ -15,21 +18,38 @@ export default class ImdbSearch extends LightningElement {
         this.markAlreadyAddedMovies();
     }
 
-    fetchFilmsFromApex() {
-        this.responseFromAPI = fetchFilms()
-            .then((executedResult) => {
-                this.responseFromAPI = executedResult;
-            })
-            .catch((error) => {
-                console.log(error);
+    async fetchFilmsFromApex(filterParameters) {
+        try {
+            console.log('value2 - '+JSON.stringify(filterParameters));
+            let responseFromAPI = await fetchFilms({
+                jsonFilterParameters: JSON.stringify(filterParameters)
             });
+            console.log('MOVIES');
+            console.log(JSON.stringify(responseFromAPI));
+            this.arrayOfMovies = JSON.parse(responseFromAPI).results;
+            console.log(JSON.stringify(this.arrayOfMovies.length));
+        } catch (error) {
+            console.log(error);
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: Error_text,
+                    message: Records_updated_error,
+                    variant: 'error'
+                })
+            );
+        }
     }
 
     async markAlreadyAddedMovies() {
         let arrayOfExistedMovieIds = await queryAddedMovieIds();
-        this.arrayOfMovies = this.arrayOfMoviesBefore.map(movie => {
+        this.arrayOfMovies = this.arrayOfMoviesBefore.map((movie) => {
             movie.isAdded = arrayOfExistedMovieIds.includes(movie.id);
             return movie;
-        })
+        });
+    }
+
+    searchHandler(event) {
+        console.log('value - '+JSON.stringify(event.detail.value));
+        this.fetchFilmsFromApex(event.detail.value);
     }
 }

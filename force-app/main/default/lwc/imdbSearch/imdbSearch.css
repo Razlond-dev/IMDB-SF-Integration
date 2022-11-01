@@ -16,20 +16,7 @@ main {
   flex-wrap: wrap;
 }
 
-.search {
-  padding: 0.5rem 1rem;
-  border-radius: 50px;
-  background-color: transparent;
-  border: solid 2px rgb(118, 247, 234);
-  font-family: inherit;
-  color: white;
-}
-
-.search::placeholder {
-  color: azure;
-}
-
-.search {
-  background-color: #2224b2;
-  outline: none;
+.search-container {
+  margin: 0 auto;
+  width: 1200px;
 }

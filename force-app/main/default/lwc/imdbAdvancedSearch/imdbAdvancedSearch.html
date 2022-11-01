@@ -1,0 +1,100 @@
+<template>
+    <form id="form" onsubmit={submitHandler}>
+        <div class="filter-icon" onclick={toggleFilters}>filter icon</div>
+        <lightning-input
+            name="title"
+            type="text"
+            placeholder="Search"
+            label="Search"
+        ></lightning-input>
+        <lightning-button type="submit" label="Search"></lightning-button>
+        <div class="slide-up">
+            <div class="filters">
+                <div>
+                    <c-custom-checkbox-group
+                        name="genres"
+                        label="Genres"
+                        options={genresOptions}
+                        value={genresValue}
+                        onchange={handleChangeGenres}
+                    >
+                    </c-custom-checkbox-group>
+                    <c-custom-checkbox-group
+                        name="contentRating"
+                        label="Content Rating"
+                        options={contentRatingOptions}
+                        value={contentRatingValue}
+                        onchange={handleChangeContentRating}
+                    >
+                    </c-custom-checkbox-group>
+                </div>
+                <div>
+                    <div class="from-to-input-container">
+                        <lightning-input
+                            name="fromReleaseDate"
+                            type="text"
+                            label="Realease Date"
+                        >
+                        </lightning-input>
+                        <div style="padding: 5px">to</div>
+                        <lightning-input name="toReleaseDate" type="text">
+                        </lightning-input>
+                    </div>
+                    <div class="from-to-input-container">
+                        <lightning-input
+                            name="fromUserRating"
+                            type="number"
+                            label="User Rating"
+                            max="10"
+                            min="1"
+                            step="0.1"
+                        >
+                        </lightning-input>
+                        <div style="padding: 5px">to</div>
+                        <lightning-input
+                            name="toUserRating"
+                            type="number"
+                            max="10"
+                            min="1"
+                            step="0.1"
+                        >
+                        </lightning-input>
+                    </div>
+                    <div class="from-to-input-container">
+                        <lightning-input
+                            name="fromNumberOfVotes"
+                            type="number"
+                            label="Number Of Votes"
+                            min="5"
+                        >
+                        </lightning-input>
+                        <div style="padding: 5px">to</div>
+                        <lightning-input
+                            name="toNumberOfVotes"
+                            type="number"
+                            min="5"
+                        >
+                        </lightning-input>
+                    </div>
+                    <div class="from-to-input-container">
+                        <lightning-input
+                            name="fromRuntime"
+                            type="number"
+                            label="Runtime"
+                            min="0"
+                        >
+                        </lightning-input>
+                        <div style="padding: 5px">to</div>
+                        <lightning-input name="toRuntime" type="number" min="0">
+                        </lightning-input>
+                    </div>
+                    <lightning-input
+                        name="plot"
+                        type="text"
+                        label="Plot"
+                    ></lightning-input>
+                </div>
+            </div>
+        </div>
+    </form>
+</template>

@@ -10,8 +10,12 @@
 
 .movie img {
   width: 100%;
+  object-fit: cover; 
+  height: 100%; /* or max-height: 100%; without object fit*/
+}
+
+.image-container {
   height: 450px;
-  object-fit: cover;
 }
 
 .movie-info {

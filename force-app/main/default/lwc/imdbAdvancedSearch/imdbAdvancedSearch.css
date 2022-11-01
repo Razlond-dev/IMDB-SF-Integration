@@ -1,0 +1,60 @@
+.search {
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    background-color: transparent;
+    border: solid 2px rgb(118, 247, 234);
+    font-family: inherit;
+    color: white;
+}
+
+.search::placeholder {
+    color: azure;
+}
+
+.search {
+    background-color: #2224b2;
+    outline: none;
+}
+
+.genres-group .slds-form-element__control {
+    display: -webkit-box;
+    display: flex !important;
+}
+
+:host {
+    --sds-c-checkbox-color-background-checked: green;
+    --sds-c-checkbox-mark-color-foreground: yellow;
+}
+
+.from-to-input-container {
+    width: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.filters {
+    background-color: white;
+    padding: 2rem;
+    max-height: 100%;
+    display: flex;
+  }
+
+.filter-icon {
+    cursor: pointer;
+}
+
+
+  .slide-up, .slide-down {
+    overflow:hidden
+  }
+  .slide-up > div, .slide-down > div {
+    margin-top: -100%;
+    transition: margin-top 0.5s ease-in-out;
+  }
+  .slide-down > div {            
+    margin-top: 0;
+  } 
+
+
+
