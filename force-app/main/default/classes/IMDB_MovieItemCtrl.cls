@@ -36,6 +36,11 @@ public with sharing class IMDB_MovieItemCtrl {
     }
 
     public static void insertMovieFromWrapper(MovieWrapper movieWrapper) {
+        // Decimal runtimeDecimal;
+        // if (movieWrapper.runtimeStr != null) {
+        //     runtimeDecimal = Decimal.valueOf(movieWrapper.runtimeStr.replaceAll('min', '').trim());
+        //     System.debug(runtimeDecimal);
+        // }
         IMDB_Movie__c movie = new IMDB_Movie__c(
             IMDB_Id__c = movieWrapper.id,
             IMDB_Title__c = movieWrapper.title,

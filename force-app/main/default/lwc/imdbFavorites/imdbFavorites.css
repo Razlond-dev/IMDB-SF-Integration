@@ -1,18 +1,27 @@
 * {
     box-sizing: border-box;
-  }
-  
-  header {
+}
+
+header {
     background-color: rgb(241, 168, 168);
     padding: 1.5rem;
     display: flex;
     justify-content: flex-end;
-  }
-  
-  main {
+}
+
+main {
     background-color: rgb(4, 163, 147);
     display: flex;
     margin: 0;
     flex-wrap: wrap;
-  }
-  
+}
+
+.search-container {
+    margin: 0 auto;
+    width: 1200px;
+}
+
+.search-pagination {
+    width: 350px;
+    margin: 0 auto;
+}

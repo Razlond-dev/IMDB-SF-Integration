@@ -10,7 +10,7 @@
         <lightning-button type="submit" label="Search"></lightning-button>
         <div class="slide-up">
             <div class="filters">
-                <div style="width: 50%; padding: 0 5px;">
+                <div style="width: 50%; padding: 0 5px">
                     <c-custom-checkbox-group
                         name="genres"
                         label="Genres"
@@ -28,18 +28,20 @@
                     >
                     </c-custom-checkbox-group>
                 </div>
-                <div style="width: 25%; padding: 0 5px;">
-                    <div class="from-to-input-container">
-                        <lightning-input
-                            name="fromReleaseDate"
-                            type="text"
-                            label="Realease Date"
-                        >
-                        </lightning-input>
-                        <div style="padding: 5px">to</div>
-                        <lightning-input name="toReleaseDate" type="text">
-                        </lightning-input>
-                    </div>
+                <div style="width: 25%; padding: 0 5px">
+                    <template if:true={isReleaseDateFilteringAllowed}>
+                        <div class="from-to-input-container">
+                            <lightning-input
+                                name="fromReleaseDate"
+                                type="text"
+                                label="Realease Date"
+                            >
+                            </lightning-input>
+                            <div style="padding: 5px">to</div>
+                            <lightning-input name="toReleaseDate" type="text">
+                            </lightning-input>
+                        </div>
+                    </template>
                     <div class="from-to-input-container">
                         <lightning-input
                             name="fromUserRating"
@@ -94,7 +96,7 @@
                         label="Plot"
                     ></lightning-input>
                 </div>
-                <div style="width: 25%; padding: 0 5px;">
+                <div style="width: 25%; padding: 0 5px">
                     <lightning-combobox
                         name="sortBy"
                         label="Sort by"

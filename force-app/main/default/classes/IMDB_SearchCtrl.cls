@@ -79,7 +79,7 @@ public with sharing class IMDB_SearchCtrl {
             List<IMDB_Movie__c> listOfMovies = [
                 SELECT IMDB_Id__c
                 FROM IMDB_Movie__c
-                WHERE OwnerId = :UserInfo.getUserId()
+                WHERE CreatedById = :UserInfo.getUserId()
             ];
             for (IMDB_Movie__c movie : listOfMovies) {
                 listOfAddedMovieExternalIds.add(movie.IMDB_Id__c);

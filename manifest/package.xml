@@ -63,6 +63,7 @@
         <members>IMDB_Movie__c.IMDB_Plot__c</members>
         <members>IMDB_Movie__c.IMDB_Stars__c</members>
         <members>IMDB_Movie__c.IMDB_Unique_Id__c</members>
+        <members>IMDB_Movie__c.IMDB_Runtime_Number__c</members>
         <name>CustomField</name>
     </types>
     <version>55.0</version>
