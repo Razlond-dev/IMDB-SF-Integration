@@ -51,6 +51,13 @@ export default class ImdbMovieItem extends LightningElement {
                     })
                 );
             }
+            this.dispatchEvent(
+                new CustomEvent('togglefavorite', {
+                    detail: {
+                        movie: this.movie
+                    }
+                })
+            );
         } catch (error) {
             console.log(error);
             this.dispatchEvent(

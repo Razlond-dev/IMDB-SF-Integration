@@ -56,4 +56,10 @@ export default class ImdbSearch extends LightningElement {
         this.arrayOfMovies = [...event.detail.records];
         console.log(JSON.stringify(event.detail.records));
     }
+
+    toggleFavoriteHandler(event) {
+        let changedMovie = {...event.detail.movie, isAdded: !event.detail.movie.isAdded};
+        let foundIndex = this.arrayOfMoviesBefore.findIndex(movie => movie.id === changedMovie.id);
+        this.arrayOfMoviesBefore[foundIndex] = changedMovie;
+    }
 }
