@@ -20,3 +20,8 @@ main {
   margin: 0 auto;
   width: 1200px;
 }
+
+.search-pagination {
+  width: 350px;
+  margin: 0 auto;
+}

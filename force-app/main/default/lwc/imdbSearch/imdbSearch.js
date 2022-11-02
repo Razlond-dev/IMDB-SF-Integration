@@ -12,10 +12,9 @@ export default class ImdbSearch extends LightningElement {
     arrayOfMovies = [];
     arrayOfMoviesBefore;
 
-    connectedCallback() {
+    async connectedCallback() {
         this.responseFromAPI = this.testResponse;
-        this.arrayOfMoviesBefore = JSON.parse(this.responseFromAPI).results;
-        this.markAlreadyAddedMovies();
+        this.arrayOfMoviesBefore = await this.markAlreadyAddedMovies(JSON.parse(this.responseFromAPI).results);
     }
 
     async fetchFilmsFromApex(filterParameters) {
@@ -26,8 +25,8 @@ export default class ImdbSearch extends LightningElement {
             });
             console.log('MOVIES');
             console.log(JSON.stringify(responseFromAPI));
-            this.arrayOfMovies = JSON.parse(responseFromAPI).results;
-            console.log(JSON.stringify(this.arrayOfMovies.length));
+            let resultArray = await this.markAlreadyAddedMovies(JSON.parse(responseFromAPI).results);
+            this.arrayOfMoviesBefore = [...resultArray];
         } catch (error) {
             console.log(error);
             this.dispatchEvent(
@@ -40,9 +39,9 @@ export default class ImdbSearch extends LightningElement {
         }
     }
 
-    async markAlreadyAddedMovies() {
+    async markAlreadyAddedMovies(arrayToCheck) {
         let arrayOfExistedMovieIds = await queryAddedMovieIds();
-        this.arrayOfMovies = this.arrayOfMoviesBefore.map((movie) => {
+        return arrayToCheck.map((movie) => {
             movie.isAdded = arrayOfExistedMovieIds.includes(movie.id);
             return movie;
         });
@@ -51,5 +50,10 @@ export default class ImdbSearch extends LightningElement {
     searchHandler(event) {
         console.log('value - '+JSON.stringify(event.detail.value));
         this.fetchFilmsFromApex(event.detail.value);
+    }
+
+    paginateHandler(event){
+        this.arrayOfMovies = [...event.detail.records];
+        console.log(JSON.stringify(event.detail.records));
     }
 }

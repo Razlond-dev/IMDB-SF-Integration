@@ -40,6 +40,20 @@ export default class ImdbAdvancedSearch extends LightningElement {
         { label: 'NC-17', value: 'NC-17' }
     ];
 
+    sortByValue = '';
+    sortByOptions = [
+        { label: 'A-Z Ascending', value: 'alpha,asc' },
+        { label: 'A-Z Descending', value: 'alpha,desc' },
+        { label: 'User Rating Ascending', value: 'user_rating,asc' },
+        { label: 'User Rating Descending', value: 'user_rating,desc' },
+        { label: 'Num Votes Ascending', value: 'num_votes,asc' },
+        { label: 'Num Votes Descending', value: 'num_votes,desc' },
+        { label: 'Runtime Ascending', value: 'runtime,asc' },
+        { label: 'Runtime Descending', value: 'runtime,desc' },
+        { label: 'Release Date Ascending', value: 'release_date,asc' },
+        { label: 'Release Date Descending', value: 'release_date,desc' }
+    ];
+
     submitHandler(event) {
         event.preventDefault();
         let numberInputNames = ['fromNumberOfVotes', 'toNumberOfVotes', 'fromRuntime', 'toRuntime'];
@@ -47,12 +61,12 @@ export default class ImdbAdvancedSearch extends LightningElement {
         const formProps = Object.fromEntries(formData);
         formProps.genres = this.genresValue;
         formProps.contentRating = this.contentRatingValue;
+        formProps.sortBy = this.sortByValue;
         for (const property in formProps) {
             if (formProps[property] === '') {
                 formProps[property] = null;
             }
             if (numberInputNames.includes(property) && formProps[property] != null) {
-                console.log('here');
                 formProps[property] = formProps[property].replace(/\s/g, '');
             } 
             if (property === 'fromUserRating' && formProps[property] !== null) {
@@ -62,6 +76,7 @@ export default class ImdbAdvancedSearch extends LightningElement {
                 formProps[property] = formProps[property].toString().replace(',', '.');
             }
         }
+        console.log('FORM PROPS - '+JSON.stringify(formProps));
         this.dispatchEvent(
             new CustomEvent('search', {
                 detail: { value: formProps }
@@ -69,12 +84,16 @@ export default class ImdbAdvancedSearch extends LightningElement {
         );
     }
 
-    handleChangeGenres(e) {
-        this.genresValue = e.detail.selected;
+    handleChangeGenres(event) {
+        this.genresValue = event.detail.selected;
     }
 
-    handleChangeContentRating(e) {
-        this.contentRatingValue = e.detail.selected;
+    handleChangeContentRating(event) {
+        this.contentRatingValue = event.detail.selected;
+    }
+
+    handleChangeSortBy(event) {
+        this.sortByValue = event.detail.value;
     }
 
     toggleFilters() {

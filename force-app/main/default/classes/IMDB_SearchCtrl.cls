@@ -48,6 +48,9 @@ public with sharing class IMDB_SearchCtrl {
             if (filterParameters.plot != null) {
                 queryParams += '&plot=' + filterParameters.plot;
             }
+            if (filterParameters.sortBy != null) {
+                queryParams += '&sort=' + filterParameters.sortBy;
+            }
             if (queryParams != '') {
                 queryParams = queryParams.substring(1, queryParams.length());
             }
@@ -105,5 +108,6 @@ public with sharing class IMDB_SearchCtrl {
         public String fromRuntime { get; set; }
         public String toRuntime { get; set; }
         public String plot { get; set; }
+        public String sortBy { get; set; }
     }
 }

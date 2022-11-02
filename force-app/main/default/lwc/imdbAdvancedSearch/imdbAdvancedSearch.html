@@ -10,7 +10,7 @@
         <lightning-button type="submit" label="Search"></lightning-button>
         <div class="slide-up">
             <div class="filters">
-                <div>
+                <div style="width: 50%; padding: 0 5px;">
                     <c-custom-checkbox-group
                         name="genres"
                         label="Genres"
@@ -28,7 +28,7 @@
                     >
                     </c-custom-checkbox-group>
                 </div>
-                <div>
+                <div style="width: 25%; padding: 0 5px;">
                     <div class="from-to-input-container">
                         <lightning-input
                             name="fromReleaseDate"
@@ -93,6 +93,16 @@
                         type="text"
                         label="Plot"
                     ></lightning-input>
+                </div>
+                <div style="width: 25%; padding: 0 5px;">
+                    <lightning-combobox
+                        name="sortBy"
+                        label="Sort by"
+                        value={sortByValue}
+                        placeholder="Select sorting"
+                        options={sortByOptions}
+                        onchange={handleChangeSortBy}
+                    ></lightning-combobox>
                 </div>
             </div>
         </div>

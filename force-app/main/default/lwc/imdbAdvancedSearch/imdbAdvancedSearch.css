@@ -27,7 +27,6 @@
 }
 
 .from-to-input-container {
-    width: 200px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -38,23 +37,31 @@
     padding: 2rem;
     max-height: 100%;
     display: flex;
-  }
+}
 
 .filter-icon {
     cursor: pointer;
 }
 
-
-  .slide-up, .slide-down {
-    overflow:hidden
-  }
-  .slide-up > div, .slide-down > div {
+.slide-up {
+    overflow: hidden;
+}
+.slide-up > div,
+.slide-down > div {
     margin-top: -100%;
     transition: margin-top 0.5s ease-in-out;
-  }
-  .slide-down > div {            
+}
+.slide-down > div {
     margin-top: 0;
-  } 
+}
 
+.slide-down {
+    overflow: initial;
+    animation: 2.5s delay-overflow;
+}
 
-
+@keyframes delay-overflow {
+    from {
+        overflow: hidden;
+    }
+}

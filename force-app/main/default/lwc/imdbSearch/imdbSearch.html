@@ -1,16 +1,24 @@
 <template>
     <header>
         <div class="search-container">
-            <c-imdb-advanced-search onsearch={searchHandler}></c-imdb-advanced-search>
+            <c-imdb-advanced-search
+                onsearch={searchHandler}
+            ></c-imdb-advanced-search>
         </div>
     </header>
     <main id="main">
-      <template for:each={arrayOfMovies} for:item="movie" for:index="index">
-          <c-imdb-movie-item
-              key={movie.id}
-              movie={movie}
-              is-initially-added={movie.isAdded}
-          ></c-imdb-movie-item>
-      </template>
-  </main>
+        <template for:each={arrayOfMovies} for:item="movie" for:index="index">
+            <c-imdb-movie-item
+                key={movie.id}
+                movie={movie}
+                is-initially-added={movie.isAdded}
+            ></c-imdb-movie-item>
+        </template>
+    </main>
+    <div class="search-pagination">
+        <c-imdb-pagination
+            records={arrayOfMoviesBefore}
+            onpaginate={paginateHandler}
+        ></c-imdb-pagination>
+    </div>
 </template>
