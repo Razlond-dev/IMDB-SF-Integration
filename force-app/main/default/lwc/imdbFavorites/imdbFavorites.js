@@ -1,11 +1,15 @@
 import { LightningElement } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import { NavigationMixin } from "lightning/navigation";
 import queryAddedMovies from '@salesforce/apex/IMDB_FavoritesCtrl.queryAddedMovies';
 // labels
 import Error_text from '@salesforce/label/c.Error_text';
 import Records_updated_error from '@salesforce/label/c.Records_updated_error';
 
-export default class ImdbFavorites extends LightningElement {
+const SEARCH_PAGE_API_NAME = 'IMDB_Search';
+const NAVIGATION_TAB_TYPE = 'standard__navItemPage';
+
+export default class ImdbFavorites extends NavigationMixin(LightningElement) {
     responseFromAPI;
     arrayOfMovies = [];
     arrayOfMoviesBefore;
@@ -51,5 +55,14 @@ export default class ImdbFavorites extends LightningElement {
         let changedMovie = {...event.detail.movie, isAdded: !event.detail.movie.isAdded};
         let foundIndex = this.arrayOfMoviesBefore.findIndex(movie => movie.id === changedMovie.id);
         this.arrayOfMoviesBefore[foundIndex] = changedMovie;
+    }
+
+    navigateToSearch() {
+        this[NavigationMixin.Navigate]({
+            type: NAVIGATION_TAB_TYPE,
+            attributes: {
+                apiName: SEARCH_PAGE_API_NAME
+            }
+        });
     }
 }
