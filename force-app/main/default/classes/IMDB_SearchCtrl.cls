@@ -2,12 +2,14 @@ public with sharing class IMDB_SearchCtrl {
     @AuraEnabled
     public static String fetchFilms(String jsonFilterParameters) {
         try {
+            IMDB_Settings__c imdbSettings = IMDB_Settings__c.getInstance();
             FilterParameters filterParameters = (FilterParameters) JSON.deserialize(
                 jsonFilterParameters,
                 FilterParameters.class
             );
             System.debug(filterParameters);
-            String endPoint = 'https://imdb-api.com/API/AdvancedSearch/k_1rk0yomw?';
+            String endPoint = 'https://imdb-api.com/API/AdvancedSearch/';
+            endPoint += imdbSettings.IMDB_API_Key__c + '?';
             String queryParams = '';
             if (filterParameters.title != null) {
                 queryParams += '&title=' + filterParameters.title;
@@ -48,6 +50,7 @@ public with sharing class IMDB_SearchCtrl {
             if (filterParameters.plot != null) {
                 queryParams += '&plot=' + filterParameters.plot;
             }
+            queryParams += '&count=' + imdbSettings.IMDB_Movies_Amount__c.intValue();
             if (filterParameters.sortBy != null) {
                 queryParams += '&sort=' + filterParameters.sortBy;
             }
@@ -55,13 +58,14 @@ public with sharing class IMDB_SearchCtrl {
                 queryParams = queryParams.substring(1, queryParams.length());
             }
             endPoint += queryParams;
+            System.debug('query params - '+queryParams);
             Http http = new Http();
             HttpRequest req = new HttpRequest();
             req.setEndpoint(endPoint);
             req.setMethod('GET');
+            req.setTimeout(30000);
             HttpResponse resp = http.send(req);
             return resp.getBody();
-            // return endPoint;
         } catch (Exception catchedException) {
             AuraHandledException error = new AuraHandledException(
                 System.Label.Records_updated_error
@@ -93,6 +97,23 @@ public with sharing class IMDB_SearchCtrl {
             throw error;
         }
         return listOfAddedMovieExternalIds;
+    }
+
+    @AuraEnabled
+    public static IMDB_Settings__c getIMDBSettings() {
+        return IMDB_Settings__c.getInstance();
+    }
+
+    @AuraEnabled
+    public static void updateIMDBSettings(IMDB_Settings__c updatedSettings) {
+        try {
+            upsert updatedSettings;
+        } catch (Exception catchedException) {
+            AuraHandledException error = new AuraHandledException(System.Label.Records_access_error);
+            error.setMessage(System.Label.Records_access_error);
+            System.debug(catchedException.getMessage());
+            throw error;
+        }
     }
 
     public class FilterParameters {

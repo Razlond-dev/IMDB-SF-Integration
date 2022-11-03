@@ -22,15 +22,5 @@
                 disabled={disableNext}
             ></lightning-button>
         </lightning-layout-item>
-        <lightning-layout-item>
-            <lightning-combobox
-            variant="label-hidden"
-                name="sortBy"
-                value={recordsPerPage}
-                placeholder="Records per Page"
-                options={recordPerPageOptions}
-                onchange={handleChangeRecordsPerPage}
-            ></lightning-combobox>
-        </lightning-layout-item>
     </lightning-layout>
 </template>

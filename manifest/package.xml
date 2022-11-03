@@ -47,6 +47,7 @@
     </types>
     <types>
         <members>IMDB_Movie__c</members>
+        <members>IMDB_Settings__c</members>
         <name>CustomObject</name>
     </types>
     <types>
@@ -64,6 +65,9 @@
         <members>IMDB_Movie__c.IMDB_Stars__c</members>
         <members>IMDB_Movie__c.IMDB_Unique_Id__c</members>
         <members>IMDB_Movie__c.IMDB_Runtime_Number__c</members>
+        <members>IMDB_Settings__c.IMDB_API_Key__c</members>
+        <members>IMDB_Settings__c.IMDB_Movies_Amount__c</members>
+        <members>IMDB_Settings__c.IMDB_Records_Per_Page__c	</members>
         <name>CustomField</name>
     </types>
     <version>55.0</version>

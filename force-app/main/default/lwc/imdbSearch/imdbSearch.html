@@ -1,5 +1,6 @@
 <template>
     <lightning-button label="Go to Favorites" onclick={navigateToFavorites}></lightning-button>
+    <c-imdb-settings settings={imdbSettings} onsettingschange={settingsChangeHandler}></c-imdb-settings>
     <header>
         <div class="search-container">
             <c-imdb-advanced-search
@@ -22,6 +23,7 @@
         <c-imdb-pagination
             records={arrayOfMoviesBefore}
             onpaginate={paginateHandler}
+            records-per-page={recordsPerPage}
         ></c-imdb-pagination>
     </div>
 </template>

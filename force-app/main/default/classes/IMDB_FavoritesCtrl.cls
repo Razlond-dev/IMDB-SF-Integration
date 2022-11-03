@@ -139,4 +139,21 @@ public with sharing class IMDB_FavoritesCtrl {
         }
         return JSON.serialize(listOfMovieWrappers);
     }
+
+    @AuraEnabled
+    public static IMDB_Settings__c getIMDBSettings() {
+        return IMDB_Settings__c.getInstance();
+    }
+
+    @AuraEnabled
+    public static void updateIMDBSettings(IMDB_Settings__c updatedSettings) {
+        try {
+            upsert updatedSettings;
+        } catch (Exception catchedException) {
+            AuraHandledException error = new AuraHandledException(System.Label.Records_access_error);
+            error.setMessage(System.Label.Records_access_error);
+            System.debug(catchedException.getMessage());
+            throw error;
+        }
+    }
 }

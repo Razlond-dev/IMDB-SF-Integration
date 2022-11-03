@@ -3,7 +3,7 @@ import { LightningElement, api } from 'lwc';
 
 export default class imdbPagination extends LightningElement {
     currentPage = 1;
-    recordsPerPage = 2;
+    moviesPerPage;
     totalPage = 0;
     totalRecords;
     visibleRecords;
@@ -14,9 +14,30 @@ export default class imdbPagination extends LightningElement {
     set records(data) {
         if (data) {
             this.totalRecords = data;
-            this.totalPage = Math.ceil(data.length / this.recordsPerPage);
-            this.updateRecords();
+            if (this.moviesPerPage && this.totalRecords) {
+                this.totalPage = Math.ceil(data.length / this.recordsPerPage);
+                if (this.currentPage > this.totalPage) {
+                    this.currentPage = 1;
+                }
+                this.updateRecords();       
+            }
         }
+    }
+    @api
+    set recordsPerPage(data) {
+        if (data) {
+            this.moviesPerPage = Number(data);
+            if (this.moviesPerPage && this.totalRecords) {
+                this.totalPage = Math.ceil(this.totalRecords.length / this.moviesPerPage);
+                if (this.currentPage > this.totalPage) {
+                    this.currentPage = 1;
+                }
+                this.updateRecords();       
+            }
+        }
+    }
+    get recordsPerPage() {
+        return this.moviesPerPage;
     }
     recordPerPageOptions = [
         { label: '2', value: '2' },
@@ -44,8 +65,8 @@ export default class imdbPagination extends LightningElement {
         }
     }
     updateRecords() {
-        const startOfPagination = (this.currentPage - 1) * this.recordsPerPage;
-        const endOfPagination = this.recordsPerPage * this.currentPage;
+        const startOfPagination = (this.currentPage - 1) * this.moviesPerPage;
+        const endOfPagination = this.moviesPerPage * this.currentPage;
         this.visibleRecords = this.totalRecords.slice(
             startOfPagination,
             endOfPagination
@@ -57,15 +78,5 @@ export default class imdbPagination extends LightningElement {
                 }
             })
         );
-    }
-    handleChangeRecordsPerPage(event) {
-        this.recordsPerPage = event.detail.value;
-        this.totalPage = Math.ceil(
-            this.totalRecords.length / this.recordsPerPage
-        );
-        if (this.currentPage > this.totalPage) {
-            this.currentPage = 1;
-        }
-        this.updateRecords();
     }
 }
