@@ -14,10 +14,10 @@ public with sharing class IMDB_SearchCtrl {
             if (filterParameters.title != null) {
                 queryParams += '&title=' + filterParameters.title;
             }
-            if (!filterParameters.genres.isEmpty()) {
+            if (filterParameters.genres != null && !filterParameters.genres.isEmpty()) {
                 queryParams += '&genres=' + String.join(filterParameters.genres, ',');
             }
-            if (!filterParameters.contentRating.isEmpty()) {
+            if (filterParameters.contentRating != null && !filterParameters.contentRating.isEmpty()) {
                 for (String certificate : filterParameters.contentRating) {
                     certificate = 'us:' + certificate;
                 }
@@ -93,7 +93,7 @@ public with sharing class IMDB_SearchCtrl {
                 System.Label.Records_updated_error
             );
             error.setMessage(System.Label.Records_updated_error);
-            System.debug(catchedException.getMessage());
+            System.debug(catchedException);
             throw error;
         }
         return listOfAddedMovieExternalIds;
