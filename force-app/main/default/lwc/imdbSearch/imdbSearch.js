@@ -62,8 +62,36 @@ export default class ImdbSearch extends NavigationMixin(LightningElement) {
     }
 
     searchHandler(event) {
-        console.log('value - '+JSON.stringify(event.detail.value));
-        this.fetchFilmsFromApex(event.detail.value);
+        try {
+            console.log('value1 - ' + JSON.stringify(event.detail.value));
+            let filterParameters = event.detail.value;
+            let isValidParameters = false;
+            for (const parameter in filterParameters) {
+                if (
+                    (!Array.isArray(filterParameters[parameter]) &&
+                        filterParameters[parameter] != null &&
+                        parameter !== 'sortBy') ||
+                    (Array.isArray(filterParameters[parameter]) &&
+                        filterParameters[parameter].length > 0)
+                ) {
+                    isValidParameters = true;
+                }
+            }
+
+            if (isValidParameters) {
+                this.fetchFilmsFromApex(event.detail.value);
+            } else {
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: Error_text,
+                        message: 'Please select at least one filter option except sorting',
+                        variant: 'error'
+                    })
+                );
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     paginateHandler(event){
