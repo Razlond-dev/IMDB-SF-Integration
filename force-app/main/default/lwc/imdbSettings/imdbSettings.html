@@ -37,6 +37,7 @@
                 >
                     <form id="settingsForm" onsubmit={submitHandler}>
                         <lightning-input
+                            field-level-help="Enter your IMDB API key if you have one, if no, revert to defaults and leave default one"
                             class="slds-size_small"
                             name="imdbAPIKey"
                             type="text"
@@ -44,23 +45,37 @@
                             value={imdbAPIKeyValue}
                             onchange={handleChangeimdbAPIKey}
                         ></lightning-input>
-                        <lightning-radio-group
-                            name="moviesAmount"
-                            label="Amount of movies fetched"
-                            options={moviesAmountOptions}
-                            onchange={handleChangeMoviesAmount}
-                            value={moviesAmountValue}
-                            type="radio"
-                        ></lightning-radio-group>
-                        <lightning-radio-group
-                            name="recordsPerPage"
-                            label="Amount of movies per page"
-                            options={recordsPerPageOptions}
-                            onchange={handleChangeRecordsPerPage}
-                            value={recordsPerPageValue}
-                            type="radio"
-                        ></lightning-radio-group>
-                        <lightning-button class="slds-hide" data-id="overview" type="submit"></lightning-button>
+                        <div class="slds-list_horizontal">
+                            <lightning-radio-group
+                                name="moviesAmount"
+                                label="Amount of movies fetched"
+                                options={moviesAmountOptions}
+                                onchange={handleChangeMoviesAmount}
+                                value={moviesAmountValue}
+                                type="radio"
+                            ></lightning-radio-group>
+                            <lightning-helptext
+                                content="Maximum amount of movies fetched from IMDB. The higher value - the longer loading speed"
+                            ></lightning-helptext>
+                        </div>
+                        <div class="slds-list_horizontal">
+                            <lightning-radio-group
+                                name="recordsPerPage"
+                                label="Amount of movies per page"
+                                options={recordsPerPageOptions}
+                                onchange={handleChangeRecordsPerPage}
+                                value={recordsPerPageValue}
+                                type="radio"
+                            ></lightning-radio-group>
+                            <lightning-helptext
+                                content="Amount of movies displayed on a page"
+                            ></lightning-helptext>
+                        </div>
+                        <lightning-button
+                            class="slds-hide"
+                            data-id="overview"
+                            type="submit"
+                        ></lightning-button>
                     </form>
                 </div>
 
@@ -68,9 +83,17 @@
                 <footer class="slds-modal__footer">
                     <lightning-button label="Cancel" title="Cancel" onclick={hideModalBox}>
                     </lightning-button>
-                    <lightning-button label="Revert to Defaults" title="Revert to Defaults" onclick={revertToDefaults}>
+                    <lightning-button
+                        label="Revert to Defaults"
+                        title="Revert to Defaults"
+                        onclick={revertToDefaults}
+                    >
                     </lightning-button>
-                    <lightning-button label="Save Changes" title="Save Changes" onclick={submitForm}>
+                    <lightning-button
+                        label="Save Changes"
+                        title="Save Changes"
+                        onclick={submitForm}
+                    >
                     </lightning-button>
                 </footer>
             </div>

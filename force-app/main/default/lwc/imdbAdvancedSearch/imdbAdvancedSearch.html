@@ -32,18 +32,20 @@
                     <template if:true={isReleaseDateFilteringAllowed}>
                         <div class="from-to-input-container">
                             <lightning-input
+                                field-level-help="Valid format: YYYY-MM-DD, YYYY-MM, or YYYY"
                                 name="fromReleaseDate"
                                 type="text"
                                 label="Realease Date"
+                                data-id="releaseDate"
                             >
                             </lightning-input>
                             <div style="padding: 5px">to</div>
-                            <lightning-input name="toReleaseDate" type="text">
-                            </lightning-input>
+                            <lightning-input data-id="releaseDate" name="toReleaseDate" type="text"> </lightning-input>
                         </div>
                     </template>
                     <div class="from-to-input-container">
                         <lightning-input
+                            field-level-help="Search based on IMDB user rating"
                             name="fromUserRating"
                             type="number"
                             label="User Rating"
@@ -64,6 +66,7 @@
                     </div>
                     <div class="from-to-input-container">
                         <lightning-input
+                            field-level-help="Search based on IMDB user votes"
                             name="fromNumberOfVotes"
                             type="number"
                             label="Number Of Votes"
@@ -71,15 +74,12 @@
                         >
                         </lightning-input>
                         <div style="padding: 5px">to</div>
-                        <lightning-input
-                            name="toNumberOfVotes"
-                            type="number"
-                            min="5"
-                        >
+                        <lightning-input name="toNumberOfVotes" type="number" min="5">
                         </lightning-input>
                     </div>
                     <div class="from-to-input-container">
                         <lightning-input
+                            field-level-help="Enter a number in minutes e.g. '120' (equals to 2 hours)"
                             name="fromRuntime"
                             type="number"
                             label="Runtime"
@@ -87,10 +87,10 @@
                         >
                         </lightning-input>
                         <div style="padding: 5px">to</div>
-                        <lightning-input name="toRuntime" type="number" min="0">
-                        </lightning-input>
+                        <lightning-input name="toRuntime" type="number" min="0"> </lightning-input>
                     </div>
                     <lightning-input
+                        field-level-help="Search for words that might appear in the plot summary"
                         name="plot"
                         type="text"
                         label="Plot"

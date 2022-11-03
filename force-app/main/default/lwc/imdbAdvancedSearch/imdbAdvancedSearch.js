@@ -100,11 +100,57 @@ export default class ImdbAdvancedSearch extends LightningElement {
             }
         }
         console.log('FORM PROPS - ' + JSON.stringify(formProps));
-        this.dispatchEvent(
-            new CustomEvent('search', {
-                detail: { value: formProps }
-            })
+        // console.log('VALIDATION - '+this.validate());
+        let isValidationPassed = this.validate();
+        if (isValidationPassed) {
+            this.dispatchEvent(
+                new CustomEvent('search', {
+                    detail: { value: formProps }
+                })
+            );
+        }
+    }
+
+    validate() {
+        const arrayOfInputNamesToCheck = ['fromReleaseDate', 'toReleaseDate'];
+        
+        const allValid = [...this.template.querySelectorAll('[data-id="releaseDate"]')].reduce(
+            (validSoFar, inputCmp) => {
+                if (arrayOfInputNamesToCheck.includes(inputCmp.name) && inputCmp.value !== '' && !this.dateIsValid(inputCmp.value)) {
+                    inputCmp.setCustomValidity('Invalid date format');
+                } else {
+                    inputCmp.setCustomValidity("");
+                }
+                inputCmp.reportValidity();
+                return validSoFar && inputCmp.checkValidity();
+            },
+            true
         );
+        return allValid;
+    }
+
+    dateIsValid(dateStr) {
+        const regex = /^\d{4}-\d{2}-\d{2}$/;
+        const regex1 = /^\d{4}-\d{2}$/;
+        const regex2 = /^\d{4}$/;
+
+        if (
+            dateStr.match(regex) === null &&
+            dateStr.match(regex1) === null &&
+            dateStr.match(regex2) === null
+        ) {
+            return false;
+        }
+
+        const date = new Date(dateStr);
+
+        const timestamp = date.getTime();
+
+        if (typeof timestamp !== 'number' || Number.isNaN(timestamp)) {
+            return false;
+        }
+
+        return date.toISOString().startsWith(dateStr);
     }
 
     handleChangeGenres(event) {
