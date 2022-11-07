@@ -1,71 +1,31 @@
 public with sharing class IMDB_SearchCtrl {
     @AuraEnabled
-    public static String fetchFilms(String jsonFilterParameters) {
+    public static IMDB_ResponseWrapper fetchFilms(String jsonFilterParameters) {
         try {
-            IMDB_Settings__c imdbSettings = IMDB_Settings__c.getInstance();
             FilterParameters filterParameters = (FilterParameters) JSON.deserialize(
                 jsonFilterParameters,
                 FilterParameters.class
             );
+            System.debug('json - ' + jsonFilterParameters);
             System.debug(filterParameters);
+
             String endPoint = 'https://imdb-api.com/API/AdvancedSearch/';
-            endPoint += imdbSettings.IMDB_API_Key__c + '?';
-            String queryParams = '';
-            if (filterParameters.title != null) {
-                queryParams += '&title=' + filterParameters.title;
-            }
-            if (filterParameters.genres != null && !filterParameters.genres.isEmpty()) {
-                queryParams += '&genres=' + String.join(filterParameters.genres, ',');
-            }
-            if (filterParameters.contentRating != null && !filterParameters.contentRating.isEmpty()) {
-                for (String certificate : filterParameters.contentRating) {
-                    certificate = 'us:' + certificate;
-                }
-                queryParams += '&certificates=' + String.join(filterParameters.contentRating, ',');
-            }
-            if (filterParameters.fromReleaseDate != null || filterParameters.toReleaseDate != null) {
-                queryParams += '&release_date=';
-                queryParams += filterParameters.fromReleaseDate != null ? filterParameters.fromReleaseDate : '';
-                queryParams += ',';
-                queryParams += filterParameters.toReleaseDate != null ? filterParameters.toReleaseDate : '';
-            }
-            if (filterParameters.fromUserRating != null || filterParameters.toUserRating != null) {
-                queryParams += '&user_rating=';
-                queryParams += filterParameters.fromUserRating != null ? filterParameters.fromUserRating : '';
-                queryParams += ',';
-                queryParams += filterParameters.toUserRating != null ? filterParameters.toUserRating : '';
-            }
-            if (filterParameters.fromNumberOfVotes != null || filterParameters.toNumberOfVotes != null) {
-                queryParams += '&num_votes=';
-                queryParams += filterParameters.fromNumberOfVotes != null ? filterParameters.fromNumberOfVotes : '';
-                queryParams += ',';
-                queryParams += filterParameters.toNumberOfVotes != null ? filterParameters.toNumberOfVotes : '';
-            }
-            if (filterParameters.fromRuntime != null || filterParameters.toRuntime != null) {
-                queryParams += '&moviemeter=';
-                queryParams += filterParameters.fromRuntime != null ? filterParameters.fromRuntime : '';
-                queryParams += ',';
-                queryParams += filterParameters.toRuntime != null ? filterParameters.toRuntime : '';
-            }
-            if (filterParameters.plot != null) {
-                queryParams += '&plot=' + filterParameters.plot;
-            }
-            queryParams += '&count=' + imdbSettings.IMDB_Movies_Amount__c.intValue();
-            if (filterParameters.sortBy != null) {
-                queryParams += '&sort=' + filterParameters.sortBy;
-            }
-            if (queryParams != '') {
-                queryParams = queryParams.substring(1, queryParams.length());
-            }
-            endPoint += queryParams;
-            System.debug('query params - '+queryParams);
+            endPoint += constructQueryString(filterParameters);
+            
             Http http = new Http();
             HttpRequest req = new HttpRequest();
             req.setEndpoint(endPoint);
             req.setMethod('GET');
             req.setTimeout(30000);
             HttpResponse resp = http.send(req);
-            return resp.getBody();
+            IMDB_ResponseWrapper responseWrapper = IMDB_ResponseWrapper.parse(resp.getBody());
+            if (responseWrapper.results != null && !responseWrapper.results.isEmpty()) {
+                for (IMDB_ResponseWrapper.IMDB_ResponseMovie fetchedMovie : responseWrapper.results) {
+                    fetchedMovie.isAdded = false;
+                }
+            }
+            System.debug('RESP WRAP - '+responseWrapper);
+            return responseWrapper;
         } catch (Exception catchedException) {
             AuraHandledException error = new AuraHandledException(
                 System.Label.Records_updated_error
@@ -104,6 +64,59 @@ public with sharing class IMDB_SearchCtrl {
         return IMDB_Settings__c.getInstance();
     }
 
+    public static String constructQueryString(FilterParameters filterParameters) {
+        IMDB_Settings__c imdbSettings = IMDB_Settings__c.getInstance();
+        String queryParams = '';
+        if (filterParameters.title != null) {
+            queryParams += '&title=' + filterParameters.title;
+        }
+        if (filterParameters.genres != null && !filterParameters.genres.isEmpty()) {
+            queryParams += '&genres=' + String.join(filterParameters.genres, ',');
+        }
+        if (filterParameters.contentRating != null && !filterParameters.contentRating.isEmpty()) {
+            for (String certificate : filterParameters.contentRating) {
+                certificate = 'us:' + certificate;
+            }
+            queryParams += '&certificates=' + String.join(filterParameters.contentRating, ',');
+        }
+        if (filterParameters.fromReleaseDate != null || filterParameters.toReleaseDate != null) {
+            queryParams += '&release_date=';
+            queryParams += filterParameters.fromReleaseDate != null ? filterParameters.fromReleaseDate : '';
+            queryParams += ',';
+            queryParams += filterParameters.toReleaseDate != null ? filterParameters.toReleaseDate : '';
+        }
+        if (filterParameters.fromUserRating != null || filterParameters.toUserRating != null) {
+            queryParams += '&user_rating=';
+            queryParams += filterParameters.fromUserRating != null ? filterParameters.fromUserRating : '';
+            queryParams += ',';
+            queryParams += filterParameters.toUserRating != null ? filterParameters.toUserRating : '';
+        }
+        if (filterParameters.fromNumberOfVotes != null || filterParameters.toNumberOfVotes != null) {
+            queryParams += '&num_votes=';
+            queryParams += filterParameters.fromNumberOfVotes != null ? filterParameters.fromNumberOfVotes : '';
+            queryParams += ',';
+            queryParams += filterParameters.toNumberOfVotes != null ? filterParameters.toNumberOfVotes : '';
+        }
+        if (filterParameters.fromRuntime != null || filterParameters.toRuntime != null) {
+            queryParams += '&moviemeter=';
+            queryParams += filterParameters.fromRuntime != null ? filterParameters.fromRuntime : '';
+            queryParams += ',';
+            queryParams += filterParameters.toRuntime != null ? filterParameters.toRuntime : '';
+        }
+        if (filterParameters.plot != null) {
+            queryParams += '&plot=' + filterParameters.plot;
+        }
+        queryParams += '&count=' + imdbSettings.IMDB_Movies_Amount__c.intValue();
+        if (filterParameters.sortBy != null) {
+            queryParams += '&sort=' + filterParameters.sortBy;
+        }
+        if (queryParams != '') {
+            queryParams = queryParams.substring(1, queryParams.length());
+        }
+        System.debug('query params - '+queryParams);
+        return imdbSettings.IMDB_API_Key__c + '?' + queryParams;
+    }
+
     @AuraEnabled
     public static void updateIMDBSettings(IMDB_Settings__c updatedSettings) {
         try {
@@ -131,4 +144,5 @@ public with sharing class IMDB_SearchCtrl {
         public String plot { get; set; }
         public String sortBy { get; set; }
     }
+  
 }

@@ -70,5 +70,9 @@
         <members>IMDB_Settings__c.IMDB_Records_Per_Page__c	</members>
         <name>CustomField</name>
     </types>
+    <types>
+        <members>IMDB_Integration</members>
+        <name>ConnectedApp</name>
+    </types>
     <version>55.0</version>
 </Package>

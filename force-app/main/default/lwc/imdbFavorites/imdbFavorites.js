@@ -21,8 +21,7 @@ export default class ImdbFavorites extends NavigationMixin(LightningElement) {
     async connectedCallback() {
         this.imdbSettings = await getIMDBSettings();
         this.recordsPerPage = this.imdbSettings.IMDB_Records_Per_Page__c;
-        let response = await queryAddedMovies();
-        this.arrayOfMoviesBefore = JSON.parse(response);
+        await this.queryAddedMovies();
     }
 
     async queryAddedMovies(filterParameters) {
@@ -32,7 +31,7 @@ export default class ImdbFavorites extends NavigationMixin(LightningElement) {
                 jsonFilterParameters: JSON.stringify(filterParameters)
             });
             console.log('MOVIES');
-            let resultArray = JSON.parse(responseFromAPI);
+            let resultArray = responseFromAPI.results;
             console.log(JSON.stringify(resultArray));
             this.arrayOfMoviesBefore = [...resultArray];
         } catch (error) {

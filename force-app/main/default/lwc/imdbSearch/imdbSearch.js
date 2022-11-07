@@ -27,7 +27,7 @@ export default class ImdbSearch extends NavigationMixin(LightningElement) {
         this.imdbSettings = await getIMDBSettings();
         this.recordsPerPage = this.imdbSettings.IMDB_Records_Per_Page__c;
         this.responseFromAPI = this.testResponse;
-        this.arrayOfMoviesBefore = await this.fetchFilmsFromApex(INITIAL_SEARCH_PARAMETERS);
+        await this.fetchFilmsFromApex(INITIAL_SEARCH_PARAMETERS);
         // this.arrayOfMoviesBefore = await this.markAlreadyAddedMovies(JSON.parse(this.responseFromAPI).results);
     }
 
@@ -38,12 +38,16 @@ export default class ImdbSearch extends NavigationMixin(LightningElement) {
             responseFromAPI = await fetchFilms({
                 jsonFilterParameters: JSON.stringify(filterParameters)
             });
-            let resultArray = await this.markAlreadyAddedMovies(JSON.parse(responseFromAPI).results);
+            console.log('responseFromAPI - '+responseFromAPI);
+            console.log('responseFromAPI - '+JSON.stringify(responseFromAPI));
+            console.log('responseFromAPI results - '+JSON.stringify(responseFromAPI.results));
+            let resultArray = await this.markAlreadyAddedMovies(responseFromAPI.results);
             console.log('MOVIES SIZE - '+JSON.stringify(resultArray.length));
             this.arrayOfMoviesBefore = [...resultArray];
         } catch (error) {
+            console.log(error);
             let errorMessage = Records_updated_error;
-            if (JSON.parse(responseFromAPI).errorMessage === 'Invalid API Key') {
+            if (responseFromAPI.errorMessage === 'Invalid API Key') {
                 errorMessage = 'Invalid API Key. Please go to settings and change it';
             }
             this.dispatchEvent(
@@ -122,7 +126,9 @@ export default class ImdbSearch extends NavigationMixin(LightningElement) {
         this.imdbSettings.IMDB_API_Key__c = event.detail.value.imdbAPIKey;
         this.imdbSettings.IMDB_Records_Per_Page__c = event.detail.value.recordsPerPage;
         this.imdbSettings.IMDB_Movies_Amount__c = event.detail.value.moviesAmount;
+        console.log('here');
         updateIMDBSettings({updatedSettings: this.imdbSettings});
+        console.log('here2');
     }
 
 }
