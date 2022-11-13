@@ -70,6 +70,7 @@ public with sharing class IMDB_SearchCtrl {
         if (filterParameters.title != null) {
             queryParams += '&title=' + filterParameters.title;
         }
+        queryParams += '&title_type=feature,tv_movie,tv_series,tv_episode,tv_special,tv_miniseries,documentary,short,tv_short';
         if (filterParameters.genres != null && !filterParameters.genres.isEmpty()) {
             queryParams += '&genres=' + String.join(filterParameters.genres, ',');
         }
