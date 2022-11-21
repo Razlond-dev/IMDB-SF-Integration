@@ -1,6 +1,20 @@
 <template>
-    <lightning-button label="Change Settings" title="Change Settings" onclick={showModalBox}>
-    </lightning-button>
+    <template if:true={isSearchPage}>
+        <lightning-button label="Change Settings" title="Change Settings" onclick={showModalBox}>
+        </lightning-button>
+    </template>
+    <template if:false={isSearchPage}>
+        <div>
+            <lightning-combobox
+                name="recordsPerPage"
+                options={recordsPerPageOptions}
+                onchange={handleChangeRecordsPerPageNonSearch}
+                value={recordsPerPageValue}
+                label="Amount of movies per page"
+                placeholder="Movies per page"
+            ></lightning-combobox>
+        </div>
+    </template>
 
     <template if:true={isShowModal}>
         <section

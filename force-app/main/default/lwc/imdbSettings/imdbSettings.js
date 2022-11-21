@@ -1,10 +1,11 @@
 /* eslint-disable guard-for-in */
-import { LightningElement, track, api } from 'lwc';
+import { LightningElement, api } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getDefaultIMDBSettings from '@salesforce/apex/IMDB_SettingsCtrl.getDefaultIMDBSettings';
-
+import Error_text from '@salesforce/label/c.Error_text';
 export default class ImdbSettings extends LightningElement {
-    @track isShowModal = false;
+    @api isSearchPage;
+    isShowModal = false;
     imdbSettings;
     moviesAmountValue;
     moviesAmountOptions = [
@@ -34,47 +35,67 @@ export default class ImdbSettings extends LightningElement {
         return this.imdbSettings;
     }
 
-    showModalBox() {  
+    showModalBox() {
         this.isShowModal = true;
     }
 
-    hideModalBox() {  
+    hideModalBox() {
         this.isShowModal = false;
     }
 
     submitHandler(event) {
         event.preventDefault();
-        const formData = new FormData(event.target);
-        const formProps = Object.fromEntries(formData);
-        for (const property in formProps) {
-            if (formProps[property] === '') {
-                formProps[property] = null;
+        try {
+            const formData = new FormData(event.target);
+            const formProps = Object.fromEntries(formData);
+            for (const property in formProps) {
+                if (formProps[property] === '') {
+                    formProps[property] = null;
+                }
             }
+            console.log('FORM PROPS - ' + JSON.stringify(formProps));
+            this.dispatchEvent(
+                new CustomEvent('settingschange', {
+                    detail: { value: formProps }
+                })
+            );
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Settings changed',
+                    message: 'Settings were successfully changed',
+                    variant: 'success'
+                })
+            );
+            this.hideModalBox();
+        } catch (error) {
+            console.log(error);
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: Error_text,
+                    message: 'Oops, something went wrong. Please, contact System Administrator.',
+                    variant: 'error'
+                })
+            );
         }
-        console.log('FORM PROPS - ' + JSON.stringify(formProps));
-        this.dispatchEvent(
-            new CustomEvent('settingschange', {
-                detail: { value: formProps }
-            })
-        );
-        this.dispatchEvent(
-            new ShowToastEvent({
-                title: 'Settings changed',
-                message: 'Settings were successfully changed',
-                variant: 'success'
-            })
-        );
-        this.hideModalBox();
     }
 
     handleChangeMoviesAmount(event) {
         this.moviesAmountValue = event.detail.value;
     }
-    
+
     handleChangeRecordsPerPage(event) {
         this.recordsPerPageValue = event.detail.value;
     }
-    
+
+    handleChangeRecordsPerPageNonSearch(event) {
+        this.recordsPerPageValue = event.detail.value;
+        this.dispatchEvent(
+            new CustomEvent('settingschange', {
+                detail: { value: { recordsPerPage: this.recordsPerPageValue } }
+            })
+        );
+    }
+
     handleChangeimdbAPIKey(event) {
         this.imdbAPIKeyValue = event.detail.value;
     }

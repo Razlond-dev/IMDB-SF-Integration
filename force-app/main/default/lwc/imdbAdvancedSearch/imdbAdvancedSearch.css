@@ -26,10 +26,21 @@
     --sds-c-checkbox-mark-color-foreground: yellow;
 }
 
-.from-to-input-container {
+.from-to-input__container {
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 50px;
+}
+
+.from-to-input__input-item {
+    height: 100%;
+    max-height: 100%;
+}
+
+.from-to-input__to-item {
+    height: 100%;
+    padding: 5px;
 }
 
 .filters {
@@ -37,6 +48,9 @@
     padding: 2rem;
     max-height: 100%;
     display: flex;
+    border-radius: 5px;
+    width: 100%;
+    margin: auto;
 }
 
 .filter-icon {
@@ -46,22 +60,38 @@
 .slide-up {
     overflow: hidden;
 }
-.slide-up > div,
-.slide-down > div {
+.slide-up > lightning-layout,
+.slide-down > lightning-layout {
     margin-top: -100%;
     transition: margin-top 0.5s ease-in-out;
 }
-.slide-down > div {
+.slide-down > lightning-layout {
     margin-top: 0;
 }
 
 .slide-down {
+    margin-top: 10px;
     overflow: initial;
-    animation: 2.5s delay-overflow;
+    animation: 1.5s delay-overflow;
 }
 
 @keyframes delay-overflow {
     from {
         overflow: hidden;
+        margin-top: 0px;
     }
+}
+
+lightning-input.slds-form-element__help {
+    position: absolute;
+}
+
+.slds-has-error .slds-form-element__help {
+    position: absolute;
+}
+
+.advanced-search-btn {
+    margin-top: 10px;
+    margin-right: 10px;
+    display: inline-block;
 }

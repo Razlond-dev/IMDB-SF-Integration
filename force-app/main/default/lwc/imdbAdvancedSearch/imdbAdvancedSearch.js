@@ -64,6 +64,7 @@ export default class ImdbAdvancedSearch extends LightningElement {
 
         return options;
     }
+    isFiltersOpen = false;
 
     submitHandler(event) {
         event.preventDefault();
@@ -167,5 +168,10 @@ export default class ImdbAdvancedSearch extends LightningElement {
 
     toggleFilters() {
         this.template.querySelector('.slide-up').classList.toggle('slide-down');
+        this.isFiltersOpen = !this.isFiltersOpen;
+    }
+
+    get filterLabel() {
+        return this.isFiltersOpen ? 'Close Filters' : 'Open Filters';
     }
 }

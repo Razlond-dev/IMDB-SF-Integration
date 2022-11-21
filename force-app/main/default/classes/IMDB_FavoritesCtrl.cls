@@ -5,10 +5,8 @@ public with sharing class IMDB_FavoritesCtrl {
             IMDB_ResponseWrapper responseWrapper = queryAddedMoviesHandler(jsonFilterParameters);
             return responseWrapper;
         } catch (Exception catchedException) {
-            AuraHandledException error = new AuraHandledException(
-                System.Label.Records_updated_error
-            );
-            error.setMessage(System.Label.Records_updated_error);
+            AuraHandledException error = new AuraHandledException(catchedException.getMessage());
+            error.setMessage(catchedException.getMessage());
             System.debug(catchedException.getMessage());
             throw error;
         }
@@ -24,13 +22,13 @@ public with sharing class IMDB_FavoritesCtrl {
         query += 'IMDB_Image_URL__c, IMDB_Id__c, IMDB_Rating__c, IMDB_Rating_Votes__c, IMDB_Metacritic_Rating__c, ';
         query += 'IMDB_Plot__c, IMDB_Runtime__c, IMDB_Runtime_Number__c, IMDB_Stars__c, IMDB_Title__c FROM IMDB_Movie__c';
         query += ' WHERE CreatedById = :userId';
-        System.debug('fav json params - '+jsonFilterParameters);
+        System.debug('fav json params - ' + jsonFilterParameters);
         if (jsonFilterParameters != null) {
             IMDB_SearchCtrl.FilterParameters filterParameters = (IMDB_SearchCtrl.FilterParameters) JSON.deserialize(
                 jsonFilterParameters,
                 IMDB_SearchCtrl.FilterParameters.class
             );
-            System.debug('fav params deserialized - '+filterParameters);
+            System.debug('fav params deserialized - ' + filterParameters);
             String queryParams = '';
             if (filterParameters.title != null) {
                 queryParams += ' AND IMDB_Title__c LIKE \'%' + filterParameters.title + '%\'';
@@ -57,7 +55,9 @@ public with sharing class IMDB_FavoritesCtrl {
                 }
             }
 
-            if (filterParameters.contentRating != null && !filterParameters.contentRating.isEmpty()) {
+            if (
+                filterParameters.contentRating != null && !filterParameters.contentRating.isEmpty()
+            ) {
                 for (Integer i = 0; i < filterParameters.contentRating.size(); i++) {
                     if (i == 0) {
                         queryParams +=
@@ -120,7 +120,7 @@ public with sharing class IMDB_FavoritesCtrl {
                 }
 
                 queryParams += ' ORDER BY ' + fieldToSort + ' ' + listOfSortParameters[1];
-            } 
+            }
             System.debug(queryParams);
             query += queryParams;
         } else {
@@ -142,7 +142,7 @@ public with sharing class IMDB_FavoritesCtrl {
             wrapper.metacriticRating = movie.IMDB_Metacritic_Rating__c;
             wrapper.plot = movie.IMDB_Plot__c;
             wrapper.stars = movie.IMDB_Stars__c;
-            wrapper.isAdded = true;
+            wrapper.isAddedToSF = true;
             listOfMovieWrappers.add(wrapper);
         }
         responseWrapper.results = listOfMovieWrappers;
@@ -160,10 +160,8 @@ public with sharing class IMDB_FavoritesCtrl {
         try {
             upsert updatedSettings;
         } catch (Exception catchedException) {
-            AuraHandledException error = new AuraHandledException(
-                System.Label.Records_access_error
-            );
-            error.setMessage(System.Label.Records_access_error);
+            AuraHandledException error = new AuraHandledException(catchedException.getMessage());
+            error.setMessage(catchedException.getMessage());
             System.debug(catchedException.getMessage());
             throw error;
         }

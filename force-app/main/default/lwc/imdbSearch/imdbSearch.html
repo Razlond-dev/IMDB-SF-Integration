@@ -1,29 +1,39 @@
 <template>
-    <lightning-button label="Go to Favorites" onclick={navigateToFavorites}></lightning-button>
-    <c-imdb-settings settings={imdbSettings} onsettingschange={settingsChangeHandler}></c-imdb-settings>
-    <header>
-        <div class="search-container">
-            <c-imdb-advanced-search
-                is-release-date-filtering-allowed
-                onsearch={searchHandler}
-            ></c-imdb-advanced-search>
+    <div>
+        <lightning-button class="slds-var-m-right_x-small" label="Go to Favorites" onclick={navigateToFavorites}></lightning-button>
+        <c-imdb-settings
+            settings={imdbSettings}
+            onsettingschange={settingsChangeHandler}
+            is-search-page={isSearchPage}
+        ></c-imdb-settings>
+        <header>
+            <div class="search-container">
+                <c-imdb-advanced-search
+                    is-release-date-filtering-allowed
+                    onsearch={searchHandler}
+                ></c-imdb-advanced-search>
+            </div>
+        </header>
+        <div class="main">
+            <template for:each={arrayOfMovies} for:item="movie" for:index="index">
+                <c-imdb-movie-item
+                    key={movie.id}
+                    movie={movie}
+                    is-initially-added={movie.isAddedToSF}
+                    ontogglefavorite={toggleFavoriteHandler}
+                ></c-imdb-movie-item>
+            </template>
         </div>
-    </header>
-    <main id="main">
-        <template for:each={arrayOfMovies} for:item="movie" for:index="index">
-            <c-imdb-movie-item
-                key={movie.id}
-                movie={movie}
-                is-initially-added={movie.isAdded}
-                ontogglefavorite={toggleFavoriteHandler}
-            ></c-imdb-movie-item>
-        </template>
-    </main>
-    <div class="search-pagination">
-        <c-imdb-pagination
-            records={arrayOfMoviesBefore}
-            onpaginate={paginateHandler}
-            records-per-page={recordsPerPage}
-        ></c-imdb-pagination>
+        <div class="search-pagination">
+            <c-imdb-pagination
+                records={arrayOfMoviesBefore}
+                onpaginate={paginateHandler}
+                records-per-page={recordsPerPage}
+            ></c-imdb-pagination>
+        </div>
     </div>
+    <template if:true={isLoading}>
+        <lightning-spinner variant="brand">
+        </lightning-spinner>
+    </template>
 </template>

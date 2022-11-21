@@ -1,16 +1,16 @@
 <template>
     <form id="form" onsubmit={submitHandler}>
-        <div class="filter-icon" onclick={toggleFilters}>filter icon</div>
-        <lightning-input
-            name="title"
-            type="text"
-            placeholder="Search"
-            label="Search"
-        ></lightning-input>
-        <lightning-button type="submit" label="Search"></lightning-button>
+        <!-- <div class="filter-icon" onclick={toggleFilters}>filter icon</div> -->
+        <lightning-input name="title" type="text" placeholder="Search"></lightning-input>
+        <div class="advanced-search-btn">
+            <lightning-button variant="brand" type="submit" label="Search"></lightning-button>
+        </div>
+        <div class="advanced-search-btn">
+            <lightning-button onclick={toggleFilters} label={filterLabel}></lightning-button>
+        </div>
         <div class="slide-up">
-            <div class="filters">
-                <div style="width: 50%; padding: 0 5px">
+            <lightning-layout class="slds-form slds-grid slds-gutters filters">
+                <lightning-layout-item class="slds-col slds-size_2-of-4" flexibility="auto">
                     <c-custom-checkbox-group
                         name="genres"
                         label="Genres"
@@ -27,35 +27,64 @@
                         onchange={handleChangeContentRating}
                     >
                     </c-custom-checkbox-group>
-                </div>
-                <div style="width: 25%; padding: 0 5px">
+                </lightning-layout-item>
+                <lightning-layout-item
+                    vertical-align="end"
+                    class="slds-col slds-size_1-of-4"
+                    flexibility="auto"
+                >
                     <template if:true={isReleaseDateFilteringAllowed}>
-                        <div class="from-to-input-container">
+                        <div class="slds-text-body_small">
+                            Release Date
+                            <span style="position: relative; top: -4px; right: -5px">
+                                <lightning-helptext
+                                    content="Valid format: YYYY-MM-DD, YYYY-MM, or YYYY"
+                                ></lightning-helptext
+                            ></span>
+                        </div>
+                        <div class="from-to-input__container">
                             <lightning-input
-                                field-level-help="Valid format: YYYY-MM-DD, YYYY-MM, or YYYY"
+                                variant="label-hidden"
+                                class="from-to-input__input-item"
                                 name="fromReleaseDate"
                                 type="text"
-                                label="Realease Date"
                                 data-id="releaseDate"
                             >
                             </lightning-input>
-                            <div style="padding: 5px">to</div>
-                            <lightning-input data-id="releaseDate" name="toReleaseDate" type="text"> </lightning-input>
+                            <div class="from-to-input__to-item">to</div>
+                            <lightning-input
+                                variant="label-hidden"
+                                class="from-to-input__input-item"
+                                data-id="releaseDate"
+                                name="toReleaseDate"
+                                type="text"
+                            >
+                            </lightning-input>
                         </div>
                     </template>
-                    <div class="from-to-input-container">
+                    <div class="slds-text-body_small">
+                        User Rating
+                        <span style="position: relative; top: -4px; right: -5px">
+                            <lightning-helptext
+                                content="Search based on IMDB user rating"
+                            ></lightning-helptext
+                        ></span>
+                    </div>
+                    <div class="from-to-input__container">
                         <lightning-input
-                            field-level-help="Search based on IMDB user rating"
+                            variant="label-hidden"
+                            class="from-to-input__input-item"
                             name="fromUserRating"
                             type="number"
-                            label="User Rating"
                             max="10"
                             min="1"
                             step="0.1"
                         >
                         </lightning-input>
-                        <div style="padding: 5px">to</div>
+                        <div class="from-to-input__to-item">to</div>
                         <lightning-input
+                            variant="label-hidden"
+                            class="from-to-input__input-item"
                             name="toUserRating"
                             type="number"
                             max="10"
@@ -64,30 +93,59 @@
                         >
                         </lightning-input>
                     </div>
-                    <div class="from-to-input-container">
+                    <div class="slds-text-body_small">
+                        Number Of Votes
+                        <span style="position: relative; top: -4px; right: -5px">
+                            <lightning-helptext
+                                content="Search based on IMDB user votes"
+                            ></lightning-helptext
+                        ></span>
+                    </div>
+                    <div class="from-to-input__container">
                         <lightning-input
-                            field-level-help="Search based on IMDB user votes"
+                            variant="label-hidden"
+                            class="from-to-input__input-item"
                             name="fromNumberOfVotes"
                             type="number"
-                            label="Number Of Votes"
                             min="5"
                         >
                         </lightning-input>
-                        <div style="padding: 5px">to</div>
-                        <lightning-input name="toNumberOfVotes" type="number" min="5">
+                        <div class="from-to-input__to-item">to</div>
+                        <lightning-input
+                            variant="label-hidden"
+                            class="from-to-input__input-item"
+                            name="toNumberOfVotes"
+                            type="number"
+                            min="5"
+                        >
                         </lightning-input>
                     </div>
-                    <div class="from-to-input-container">
+                    <div class="slds-text-body_small">
+                        Runtime
+                        <span style="position: relative; top: -4px; right: -5px">
+                            <lightning-helptext
+                                content="Enter a number in minutes e.g. '120' (equals to 2 hours)"
+                            ></lightning-helptext
+                        ></span>
+                    </div>
+                    <div class="from-to-input__container">
                         <lightning-input
-                            field-level-help="Enter a number in minutes e.g. '120' (equals to 2 hours)"
+                            variant="label-hidden"
+                            class="from-to-input__input-item"
                             name="fromRuntime"
                             type="number"
-                            label="Runtime"
                             min="0"
                         >
                         </lightning-input>
-                        <div style="padding: 5px">to</div>
-                        <lightning-input name="toRuntime" type="number" min="0"> </lightning-input>
+                        <div class="from-to-input__to-item">to</div>
+                        <lightning-input
+                            variant="label-hidden"
+                            class="from-to-input__input-item"
+                            name="toRuntime"
+                            type="number"
+                            min="0"
+                        >
+                        </lightning-input>
                     </div>
                     <lightning-input
                         field-level-help="Search for words that might appear in the plot summary"
@@ -95,8 +153,8 @@
                         type="text"
                         label="Plot"
                     ></lightning-input>
-                </div>
-                <div style="width: 25%; padding: 0 5px">
+                </lightning-layout-item>
+                <lightning-layout-item class="slds-col slds-size_1-of-4" flexibility="auto">
                     <lightning-combobox
                         name="sortBy"
                         label="Sort by"
@@ -105,8 +163,8 @@
                         options={sortByOptions}
                         onchange={handleChangeSortBy}
                     ></lightning-combobox>
-                </div>
-            </div>
+                </lightning-layout-item>
+            </lightning-layout>
         </div>
     </form>
 </template>

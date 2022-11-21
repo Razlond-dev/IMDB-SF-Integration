@@ -7,11 +7,10 @@ public with sharing class IMDB_SearchCtrl {
                 FilterParameters.class
             );
             System.debug('json - ' + jsonFilterParameters);
-            System.debug(filterParameters);
 
             String endPoint = 'https://imdb-api.com/API/AdvancedSearch/';
             endPoint += constructQueryString(filterParameters);
-            
+
             Http http = new Http();
             HttpRequest req = new HttpRequest();
             req.setEndpoint(endPoint);
@@ -20,11 +19,13 @@ public with sharing class IMDB_SearchCtrl {
             HttpResponse resp = http.send(req);
             IMDB_ResponseWrapper responseWrapper = IMDB_ResponseWrapper.parse(resp.getBody());
             if (responseWrapper.results != null && !responseWrapper.results.isEmpty()) {
-                for (IMDB_ResponseWrapper.IMDB_ResponseMovie fetchedMovie : responseWrapper.results) {
-                    fetchedMovie.isAdded = false;
+                for (
+                    IMDB_ResponseWrapper.IMDB_ResponseMovie fetchedMovie : responseWrapper.results
+                ) {
+                    fetchedMovie.isAddedToSF = false;
                 }
             }
-            System.debug('RESP WRAP - '+responseWrapper);
+            System.debug('RESP WRAP - ' + responseWrapper);
             return responseWrapper;
         } catch (Exception catchedException) {
             AuraHandledException error = new AuraHandledException(
@@ -82,21 +83,36 @@ public with sharing class IMDB_SearchCtrl {
         }
         if (filterParameters.fromReleaseDate != null || filterParameters.toReleaseDate != null) {
             queryParams += '&release_date=';
-            queryParams += filterParameters.fromReleaseDate != null ? filterParameters.fromReleaseDate : '';
+            queryParams += filterParameters.fromReleaseDate != null
+                ? filterParameters.fromReleaseDate
+                : '';
             queryParams += ',';
-            queryParams += filterParameters.toReleaseDate != null ? filterParameters.toReleaseDate : '';
+            queryParams += filterParameters.toReleaseDate != null
+                ? filterParameters.toReleaseDate
+                : '';
         }
         if (filterParameters.fromUserRating != null || filterParameters.toUserRating != null) {
             queryParams += '&user_rating=';
-            queryParams += filterParameters.fromUserRating != null ? filterParameters.fromUserRating : '';
+            queryParams += filterParameters.fromUserRating != null
+                ? filterParameters.fromUserRating
+                : '';
             queryParams += ',';
-            queryParams += filterParameters.toUserRating != null ? filterParameters.toUserRating : '';
+            queryParams += filterParameters.toUserRating != null
+                ? filterParameters.toUserRating
+                : '';
         }
-        if (filterParameters.fromNumberOfVotes != null || filterParameters.toNumberOfVotes != null) {
+        if (
+            filterParameters.fromNumberOfVotes != null ||
+            filterParameters.toNumberOfVotes != null
+        ) {
             queryParams += '&num_votes=';
-            queryParams += filterParameters.fromNumberOfVotes != null ? filterParameters.fromNumberOfVotes : '';
+            queryParams += filterParameters.fromNumberOfVotes != null
+                ? filterParameters.fromNumberOfVotes
+                : '';
             queryParams += ',';
-            queryParams += filterParameters.toNumberOfVotes != null ? filterParameters.toNumberOfVotes : '';
+            queryParams += filterParameters.toNumberOfVotes != null
+                ? filterParameters.toNumberOfVotes
+                : '';
         }
         if (filterParameters.fromRuntime != null || filterParameters.toRuntime != null) {
             queryParams += '&moviemeter=';
@@ -114,7 +130,7 @@ public with sharing class IMDB_SearchCtrl {
         if (queryParams != '') {
             queryParams = queryParams.substring(1, queryParams.length());
         }
-        System.debug('query params - '+queryParams);
+        System.debug('query params - ' + queryParams);
         return imdbSettings.IMDB_API_Key__c + '?' + queryParams;
     }
 
@@ -123,7 +139,9 @@ public with sharing class IMDB_SearchCtrl {
         try {
             upsert updatedSettings;
         } catch (Exception catchedException) {
-            AuraHandledException error = new AuraHandledException(System.Label.Records_access_error);
+            AuraHandledException error = new AuraHandledException(
+                System.Label.Records_access_error
+            );
             error.setMessage(System.Label.Records_access_error);
             System.debug(catchedException.getMessage());
             throw error;
@@ -145,5 +163,4 @@ public with sharing class IMDB_SearchCtrl {
         public String plot { get; set; }
         public String sortBy { get; set; }
     }
-  
 }

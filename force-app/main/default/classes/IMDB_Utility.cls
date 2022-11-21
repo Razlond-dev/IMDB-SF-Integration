@@ -16,7 +16,7 @@ public with sharing class IMDB_Utility {
         public Decimal metacriticRating { get; set; }
         public String plot { get; set; }
         public String stars { get; set; }
-        public Boolean isAdded { get; set; }
+        public Boolean isAddedToSF { get; set; }
     }
 
     public class ResponseWrapper {

@@ -2,9 +2,6 @@
 global with sharing class IMDB_RestService {
     @HttpGet
     global static void doGet() {
-        System.debug('rest context - ' + RestContext.request.requestURI);
-        System.debug('rest context - ' + RestContext.request.resourcePath);
-        System.debug('rest context params - ' + RestContext.request.params);
         IMDB_SearchCtrl.FilterParameters filterParameters = handleParams(
             RestContext.request.params
         );

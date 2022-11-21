@@ -2,16 +2,11 @@ public with sharing class IMDB_MovieItemCtrl {
     @AuraEnabled
     public static void addMovieToFavorites(String jsonMovie) {
         try {
-            MovieWrapper movie = (MovieWrapper) JSON.deserialize(
-                jsonMovie,
-                MovieWrapper.class
-            );
+            MovieWrapper movie = (MovieWrapper) JSON.deserialize(jsonMovie, MovieWrapper.class);
             insertMovieFromWrapper(movie);
         } catch (Exception catchedException) {
-            AuraHandledException error = new AuraHandledException(
-                System.Label.Records_updated_error
-            );
-            error.setMessage(System.Label.Records_updated_error);
+            AuraHandledException error = new AuraHandledException(catchedException.getMessage());
+            error.setMessage(catchedException.getMessage());
             System.debug(catchedException.getMessage());
             throw error;
         }
@@ -26,21 +21,14 @@ public with sharing class IMDB_MovieItemCtrl {
                 WHERE IMDB_Id__c = :externalId
             ];
         } catch (Exception catchedException) {
-            AuraHandledException error = new AuraHandledException(
-                System.Label.Records_updated_error
-            );
-            error.setMessage(System.Label.Records_updated_error);
+            AuraHandledException error = new AuraHandledException(catchedException.getMessage());
+            error.setMessage(catchedException.getMessage());
             System.debug(catchedException.getMessage());
             throw error;
         }
     }
 
     public static void insertMovieFromWrapper(MovieWrapper movieWrapper) {
-        // Decimal runtimeDecimal;
-        // if (movieWrapper.runtimeStr != null) {
-        //     runtimeDecimal = Decimal.valueOf(movieWrapper.runtimeStr.replaceAll('min', '').trim());
-        //     System.debug(runtimeDecimal);
-        // }
         IMDB_Movie__c movie = new IMDB_Movie__c(
             IMDB_Id__c = movieWrapper.id,
             IMDB_Title__c = movieWrapper.title,
@@ -71,6 +59,6 @@ public with sharing class IMDB_MovieItemCtrl {
         public Decimal metacriticRating { get; set; }
         public String plot { get; set; }
         public String stars { get; set; }
-        public Boolean isAdded { get; set; }
+        public Boolean isAddedToSF { get; set; }
     }
 }

@@ -32,7 +32,7 @@ global class IMDB_ResponseWrapper {
         @AuraEnabled
         global String stars { get; set; }
         @AuraEnabled
-        global Boolean isAdded { get; set; }
+        global Boolean isAddedToSF { get; set; }
     }
 
     @AuraEnabled

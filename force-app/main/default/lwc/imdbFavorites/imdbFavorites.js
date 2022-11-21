@@ -6,7 +6,6 @@ import getIMDBSettings from '@salesforce/apex/IMDB_FavoritesCtrl.getIMDBSettings
 import updateIMDBSettings from '@salesforce/apex/IMDB_FavoritesCtrl.updateIMDBSettings';
 // labels
 import Error_text from '@salesforce/label/c.Error_text';
-import Records_updated_error from '@salesforce/label/c.Records_updated_error';
 
 const SEARCH_PAGE_API_NAME = 'IMDB_Search';
 const NAVIGATION_TAB_TYPE = 'standard__navItemPage';
@@ -17,6 +16,8 @@ export default class ImdbFavorites extends NavigationMixin(LightningElement) {
     arrayOfMoviesBefore;
     imdbSettings;
     recordsPerPage;
+    isSearchPage = false;
+    isLoading = false;
 
     async connectedCallback() {
         this.imdbSettings = await getIMDBSettings();
@@ -26,6 +27,7 @@ export default class ImdbFavorites extends NavigationMixin(LightningElement) {
 
     async queryAddedMovies(filterParameters) {
         try {
+            this.isLoading = true;
             console.log('value2 - '+JSON.stringify(filterParameters));
             let responseFromAPI = await queryAddedMovies({
                 jsonFilterParameters: JSON.stringify(filterParameters)
@@ -39,11 +41,12 @@ export default class ImdbFavorites extends NavigationMixin(LightningElement) {
             this.dispatchEvent(
                 new ShowToastEvent({
                     title: Error_text,
-                    message: Records_updated_error,
+                    message: 'Oops, something went wrong. Please, contact System Administrator.',
                     variant: 'error'
                 })
             );
         }
+        this.isLoading = false;
     }
 
     searchHandler(event) {
@@ -57,7 +60,7 @@ export default class ImdbFavorites extends NavigationMixin(LightningElement) {
     }
 
     toggleFavoriteHandler(event) {
-        let changedMovie = {...event.detail.movie, isAdded: !event.detail.movie.isAdded};
+        let changedMovie = {...event.detail.movie, isAddedToSF: !event.detail.movie.isAddedToSF};
         let foundIndex = this.arrayOfMoviesBefore.findIndex(movie => movie.id === changedMovie.id);
         this.arrayOfMoviesBefore[foundIndex] = changedMovie;
     }
@@ -73,9 +76,7 @@ export default class ImdbFavorites extends NavigationMixin(LightningElement) {
 
     settingsChangeHandler(event) {
         this.recordsPerPage = event.detail.value.recordsPerPage;
-        this.imdbSettings.IMDB_API_Key__c = event.detail.value.imdbAPIKey;
         this.imdbSettings.IMDB_Records_Per_Page__c = event.detail.value.recordsPerPage;
-        this.imdbSettings.IMDB_Movies_Amount__c = event.detail.value.moviesAmount;
         updateIMDBSettings({updatedSettings: this.imdbSettings});
     }
 }

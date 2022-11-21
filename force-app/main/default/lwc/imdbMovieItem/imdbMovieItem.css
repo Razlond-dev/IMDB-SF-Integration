@@ -1,91 +1,190 @@
-.movie {
-  background-color: rgb(118, 247, 234);
-  border-radius: 3px;
-  box-shadow: 0 4px 5px rgba(0, 0, 0, 0.2);
-  width: 300px;
-  margin: 1.5rem;
-  overflow: hidden;
-  position: relative;
+:host {
+    --metascore-background-color: yellow;
+    --metascore-color: black;
 }
 
-.movie img {
-  width: 100%;
-  object-fit: cover; 
-  height: 100%; /* or max-height: 100%; without object fit*/
+.movie {
+    border-radius: 3px;
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.2);
+    background-color: #1f1f1f;
+    width: 300px;
+    margin: 12px;
+    overflow: hidden;
+    position: relative;
+    transition: all 0.2s ease-in;
+}
+
+.movie:hover {
+    background-color: rgba(0, 0, 0, 0.55);
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.75);
+    cursor: pointer;
+}
+
+.movie-image {
+    width: 100%;
+    object-fit: cover;
+    height: 100%; /* or max-height: 100%; without object fit*/
 }
 
 .image-container {
-  height: 450px;
+    height: 450px;
 }
 
 .movie-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: rgb(146, 14, 14);
-  padding: 0.5rem 1rem 1rem;
-  letter-spacing: 0.5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: black;
+    padding: 0.6rem 0px 0.6rem 0.6rem;
+    letter-spacing: 0.5px;
+    min-height: 77px;
 }
 
 .movie-info h3 {
-  margin: 0;
-}
-
-.movie-info span {
-  background-color: white;
-  border-radius: 3px;
-  padding: 0.25rem 0.5rem;
-  font-weight: bold;
+    margin: 0;
 }
 
 .overview {
-  position: absolute;
-  background-color: white;
-  padding: 2rem;
-  max-height: 100%;
-  overflow: auto;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  transform: translate(101%);
-  transition: transform 0.4s ease-in;
+    position: absolute;
+    background-color: white;
+    padding: 2rem;
+    max-height: 100%;
+    overflow: auto;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform: translate(101%);
+    transition: transform 0.4s ease-in;
 }
 
 .addButton {
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  font-weight: bold;
-  font-size: 18px;
-  cursor: pointer;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    font-weight: bold;
+    font-size: 18px;
+    cursor: pointer;
 }
 
 .removeButton {
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  font-weight: bold;
-  font-size: 18px;
-  cursor: pointer;
-  color: red;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    font-weight: bold;
+    font-size: 18px;
+    cursor: pointer;
+    color: red;
 }
 
 .overview h4 {
-  margin-top: 0;
+    margin-top: 0;
+}
+
+.movie-title {
+    color: white;
+    padding-right: 10px;
+}
+
+.imdb {
+    width: 48px;
+    margin-top: -3px;
+    margin-left: 10px;
+}
+
+.metascore {
+    width: 48px;
+    margin-top: -12px;
+    margin-left: 10px;
+}
+
+.imdb_rating {
+    color: white;
+    font-size: 16px;
+}
+
+.imdb_rating-secondary {
+    font-size: 10px;
+    color: #b4b4b4;
+}
+
+.imdb_votes {
+    font-size: 10px;
+    color: #b4b4b4;
 }
 
 .movie-info span.green {
-  color: green;
+    color: green;
 }
 
 .movie-info span.orange {
-  color: orange;
+    color: orange;
 }
 
 .movie-info span.red {
-  color: red;
+    color: red;
 }
 
-.movie:hover .overview {
-  transform: translate(0)
+.details_movie-modal {
+    --slds-c-modal-color-border: #000;
+    --slds-c-modal-content-color-background: #1f1f1f;
+    --slds-c-modal-content-text-color: #fff;
+    --slds-c-modal-footer-color-background: #1f1f1f;
+    --slds-c-modal-footer-text-color: #fff;
+    --slds-c-modal-header-color-background: #1f1f1f;
+    --slds-c-modal-header-text-color: #fff;
+}
+
+.details_movie-wrapper {
+    display: flex;
+    justify-content: space-evenly;
+    font-size: 16px;
+}
+
+.details_movie-left {
+    flex-basis: 42%;
+    max-width: 500px;
+}
+
+.details_movie-item {
+    display: flex;
+}
+
+.details_movie__item-details,
+.details_movie__text {
+    margin: 9px 0;
+}
+
+.details_movie__text {
+    flex-basis: 25%;
+    min-width: 150px;
+}
+
+.details_movie__text-with-image {
+    font-size: 18px;
+    display: inline-block;
+    text-align: center;
+}
+
+.details_movie__text-with-metascore {
+    font-size: 18px;
+    width: 27px;
+    height: 27px;
+    background-color: var(--metascore-background-color);
+    color: var(--metascore-color);
+    display: inline-block;
+    text-align: center;
+}
+
+.details_movie-image {
+    max-width: 600px;
+    max-height: 500px;
+}
+
+@keyframes drop {
+    0% {
+        top: -350px;
+    }
+    100% {
+        top: 0;
+    }
 }
