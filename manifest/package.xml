@@ -74,5 +74,9 @@
         <members>IMDB_Integration</members>
         <name>ConnectedApp</name>
     </types>
+    <types>
+        <members>IMDB_Integration</members>
+        <name>PermissionSet</name>
+    </types>
     <version>55.0</version>
 </Package>

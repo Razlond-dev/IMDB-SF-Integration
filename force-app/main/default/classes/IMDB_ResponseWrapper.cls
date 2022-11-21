@@ -2,7 +2,7 @@ global class IMDB_ResponseWrapper {
     @AuraEnabled
     global String queryString { get; set; }
     @AuraEnabled
-    global Object errorMessage { get; set; }
+    global String errorMessage { get; set; }
     @AuraEnabled
     global List<IMDB_ResponseMovie> results { get; set; }
 

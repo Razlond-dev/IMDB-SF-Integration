@@ -17,7 +17,7 @@ global with sharing class IMDB_RestService {
                 response.responseBody = Blob.valueOf(JSON.serialize(responseWrapper));
             } else {
                 response.responseBody = Blob.valueOf(
-                    JSON.serialize(IMDB_SearchCtrl.fetchFilms(JSON.serialize(filterParameters)))
+                    JSON.serialize(IMDB_SearchCtrl.fetchFilmsIMDB(JSON.serialize(filterParameters)))
                 );
             }
             response.statusCode = 200;
@@ -46,7 +46,7 @@ global with sharing class IMDB_RestService {
             insert listOfMovies;
             String responseEnding = listOfMovies.size() == 1 ? ' movie.' : ' movies.';
             response.responseBody = Blob.valueOf(
-                JSON.serialize('Successfuly inserted ' + listOfMovies.size() + responseEnding)
+                JSON.serialize('Successfully inserted ' + listOfMovies.size() + responseEnding)
             );
             response.statusCode = 200;
         } catch (Exception e) {

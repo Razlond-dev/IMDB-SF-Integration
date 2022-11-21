@@ -2,31 +2,7 @@ public with sharing class IMDB_SearchCtrl {
     @AuraEnabled
     public static IMDB_ResponseWrapper fetchFilms(String jsonFilterParameters) {
         try {
-            FilterParameters filterParameters = (FilterParameters) JSON.deserialize(
-                jsonFilterParameters,
-                FilterParameters.class
-            );
-            System.debug('json - ' + jsonFilterParameters);
-
-            String endPoint = 'https://imdb-api.com/API/AdvancedSearch/';
-            endPoint += constructQueryString(filterParameters);
-
-            Http http = new Http();
-            HttpRequest req = new HttpRequest();
-            req.setEndpoint(endPoint);
-            req.setMethod('GET');
-            req.setTimeout(30000);
-            HttpResponse resp = http.send(req);
-            IMDB_ResponseWrapper responseWrapper = IMDB_ResponseWrapper.parse(resp.getBody());
-            if (responseWrapper.results != null && !responseWrapper.results.isEmpty()) {
-                for (
-                    IMDB_ResponseWrapper.IMDB_ResponseMovie fetchedMovie : responseWrapper.results
-                ) {
-                    fetchedMovie.isAddedToSF = false;
-                }
-            }
-            System.debug('RESP WRAP - ' + responseWrapper);
-            return responseWrapper;
+            return fetchFilmsIMDB(jsonFilterParameters);
         } catch (Exception catchedException) {
             AuraHandledException error = new AuraHandledException(
                 System.Label.Records_updated_error
@@ -63,6 +39,32 @@ public with sharing class IMDB_SearchCtrl {
     @AuraEnabled
     public static IMDB_Settings__c getIMDBSettings() {
         return IMDB_Settings__c.getInstance();
+    }
+
+    public static IMDB_ResponseWrapper fetchFilmsIMDB(String jsonFilterParameters) {
+        FilterParameters filterParameters = (FilterParameters) JSON.deserialize(
+            jsonFilterParameters,
+            FilterParameters.class
+        );
+        System.debug('json - ' + jsonFilterParameters);
+
+        String endPoint = 'https://imdb-api.com/API/AdvancedSearch/';
+        endPoint += constructQueryString(filterParameters);
+
+        Http http = new Http();
+        HttpRequest req = new HttpRequest();
+        req.setEndpoint(endPoint);
+        req.setMethod('GET');
+        req.setTimeout(30000);
+        HttpResponse resp = http.send(req);
+        IMDB_ResponseWrapper responseWrapper = IMDB_ResponseWrapper.parse(resp.getBody());
+        if (responseWrapper.results != null && !responseWrapper.results.isEmpty()) {
+            for (IMDB_ResponseWrapper.IMDB_ResponseMovie fetchedMovie : responseWrapper.results) {
+                fetchedMovie.isAddedToSF = false;
+            }
+        }
+        System.debug('RESP WRAP - ' + responseWrapper);
+        return responseWrapper;
     }
 
     public static String constructQueryString(FilterParameters filterParameters) {
