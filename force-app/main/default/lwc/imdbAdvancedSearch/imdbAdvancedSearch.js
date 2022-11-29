@@ -1,5 +1,6 @@
 /* eslint-disable guard-for-in */
 import { LightningElement, api } from 'lwc';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 export default class ImdbAdvancedSearch extends LightningElement {
     @api isReleaseDateFilteringAllowed = false;
@@ -101,12 +102,20 @@ export default class ImdbAdvancedSearch extends LightningElement {
             }
         }
         console.log('FORM PROPS - ' + JSON.stringify(formProps));
-        // console.log('VALIDATION - '+this.validate());
+        console.log('VALIDATION - '+this.validate());
         let isValidationPassed = this.validate();
         if (isValidationPassed) {
             this.dispatchEvent(
                 new CustomEvent('search', {
                     detail: { value: formProps }
+                })
+            );
+        } else {
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Something went wrong',
+                    message: 'Please, check if your inputs filled correctly.',
+                    variant: 'error'
                 })
             );
         }
@@ -115,7 +124,7 @@ export default class ImdbAdvancedSearch extends LightningElement {
     validate() {
         const arrayOfInputNamesToCheck = ['fromReleaseDate', 'toReleaseDate'];
         
-        const allValid = [...this.template.querySelectorAll('[data-id="releaseDate"]')].reduce(
+        const allValid = [...this.template.querySelectorAll('lightning-input')].reduce(
             (validSoFar, inputCmp) => {
                 if (arrayOfInputNamesToCheck.includes(inputCmp.name) && inputCmp.value !== '' && !this.dateIsValid(inputCmp.value)) {
                     inputCmp.setCustomValidity('Invalid date format');
@@ -127,6 +136,7 @@ export default class ImdbAdvancedSearch extends LightningElement {
             },
             true
         );
+
         return allValid;
     }
 
